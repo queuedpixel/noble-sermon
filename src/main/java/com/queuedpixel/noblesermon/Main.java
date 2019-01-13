@@ -49,6 +49,8 @@ public class Main
             {
                 System.out.println( "Token: " + token.toString() );
             }
+
+            System.out.println( "Result: " + Main.evaluate( null, tokens ));
             System.out.println( line );
             System.out.print( "> " );
             line = reader.readLine();
@@ -114,5 +116,32 @@ public class Main
         StringBuilder builder = new StringBuilder();
         builder.appendCodePoint( codePoint );
         return builder.toString();
+    }
+
+    private static Token evaluate( Token leftToken, List< Token > tokens )
+    {
+        if ( tokens.size() == 0 ) return leftToken;
+        Token token = tokens.get( 0 );
+
+        if ( token instanceof IntegerToken )
+        {
+            return Main.evaluate( token, tokens.subList( 1, tokens.size() ));
+        }
+
+        if ( token instanceof PlusToken )
+        {
+            Token rightToken = Main.evaluate( null, tokens.subList( 1, tokens.size() ));
+            if (( !( leftToken  instanceof IntegerToken )) ||
+                ( !( rightToken instanceof IntegerToken )))
+            {
+                throw new IllegalStateException(
+                        "Cannot Add: [" + leftToken + "] and [" + rightToken + "]" );
+            }
+            IntegerToken leftInteger  = (IntegerToken) leftToken;
+            IntegerToken rightInteger = (IntegerToken) rightToken;
+            return new IntegerToken( leftInteger.getValue() + rightInteger.getValue() );
+        }
+
+        throw new IllegalStateException( "Unrecognized Token: " + token.toString() );
     }
 }
