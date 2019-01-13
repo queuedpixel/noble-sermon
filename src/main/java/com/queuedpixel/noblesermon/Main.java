@@ -45,13 +45,7 @@ public class Main
         while ( line != null )
         {
             List< Token > tokens = Main.tokenize( line );
-            for ( Token token : tokens )
-            {
-                System.out.println( "Token: " + token.toString() );
-            }
-
             System.out.println( "Result: " + Main.evaluate( null, tokens ));
-            System.out.println( line );
             System.out.print( "> " );
             line = reader.readLine();
         }
