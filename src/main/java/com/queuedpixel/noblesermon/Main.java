@@ -28,6 +28,8 @@ package com.queuedpixel.noblesermon;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Main
 {
@@ -42,19 +44,24 @@ public class Main
 
         while ( line != null )
         {
-            Main.tokenize( line );
+            List< Token > tokens = Main.tokenize( line );
+            for ( Token token : tokens )
+            {
+                System.out.println( "Token: " + token.toString() );
+            }
             System.out.println( line );
             System.out.print( "> " );
             line = reader.readLine();
         }
     }
 
-    private static void tokenize( String s )
+    private static List< Token > tokenize( String s )
     {
         // add whitespace to the end to allow us to handle closing tokens
         s += " ";
 
         // initialize our starting state
+        List< Token > tokens = new LinkedList<>();
         int index = 0;
         int state = 0;
         StringBuilder token = new StringBuilder();
@@ -72,7 +79,7 @@ public class Main
                     else if ( Character.isDigit( codePoint )) state = 1;
                     else if ( codePoint == '+' )
                     {
-                        System.out.println( "Plus" );
+                        tokens.add( new PlusToken() );
                         index++;
                     }
                     else throw new IllegalStateException(
@@ -88,7 +95,7 @@ public class Main
                     }
                     else
                     {
-                        System.out.println( "Integer: " + Integer.parseInt( token.toString() ));
+                        tokens.add( new IntegerToken( Integer.parseInt( token.toString() )));
                         state = 0;
                         token = new StringBuilder();
                     }
@@ -98,6 +105,8 @@ public class Main
                 default : throw new IllegalStateException( "Unrecognized State: " + state );
             }
         }
+
+        return tokens;
     }
 
     private static String codePointToString( int codePoint )
