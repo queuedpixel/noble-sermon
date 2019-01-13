@@ -70,6 +70,11 @@ public class Main
                 case 0:
                     if ( Character.isWhitespace( codePoint )) index++;
                     else if ( Character.isDigit( codePoint )) state = 1;
+                    else if ( codePoint == '+' )
+                    {
+                        System.out.println( "Plus" );
+                        index++;
+                    }
                     else throw new IllegalStateException(
                             "Unrecognized Character: '" + Main.codePointToString( codePoint ) + "'" );
                     break;
