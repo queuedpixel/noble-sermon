@@ -26,10 +26,25 @@ SOFTWARE.
 
 package com.queuedpixel.noblesermon;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 public class Main
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws Exception
     {
-        System.out.println( "Hello, world!" );
+        System.out.println( "Welcome to Noble-Sermon." );
+        System.out.println();
+
+        BufferedReader reader = new BufferedReader( new InputStreamReader( System.in ));
+        System.out.print( "> " );
+        String line = reader.readLine();
+
+        while ( line != null )
+        {
+            System.out.println( line );
+            System.out.print( "> " );
+            line = reader.readLine();
+        }
     }
 }
