@@ -42,9 +42,63 @@ public class Main
 
         while ( line != null )
         {
+            Main.tokenize( line );
             System.out.println( line );
             System.out.print( "> " );
             line = reader.readLine();
         }
+    }
+
+    private static void tokenize( String s )
+    {
+        // add whitespace to the end to allow us to handle closing tokens
+        s += " ";
+
+        // initialize our starting state
+        int index = 0;
+        int state = 0;
+        StringBuilder token = new StringBuilder();
+
+        // iterate through every character in the string
+        while ( index < s.length() )
+        {
+            int codePoint = s.codePointAt( index );
+
+            switch ( state )
+            {
+                // no current token
+                case 0:
+                    if ( Character.isWhitespace( codePoint )) index++;
+                    else if ( Character.isDigit( codePoint )) state = 1;
+                    else throw new IllegalStateException(
+                            "Unrecognized Character: '" + Main.codePointToString( codePoint ) + "'" );
+                    break;
+
+                // processing integer
+                case 1:
+                    if ( Character.isDigit( codePoint ))
+                    {
+                        token.appendCodePoint( codePoint );
+                        index++;
+                    }
+                    else
+                    {
+                        System.out.println( "Integer: " + Integer.parseInt( token.toString() ));
+                        state = 0;
+                        token = new StringBuilder();
+                    }
+                    break;
+
+                // unrecognized state
+                default : throw new IllegalStateException( "Unrecognized State: " + state );
+            }
+        }
+    }
+
+    private static String codePointToString( int codePoint )
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.appendCodePoint( codePoint );
+        return builder.toString();
     }
 }
